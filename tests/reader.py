@@ -4,24 +4,14 @@
 # In[ ]:
 
 
-from dataclasses import dataclass
-from typing import Any
-
-
-@dataclass(frozen=True)
-class PGM:
-    height: int
-    width: int
-    maxv: int
-    data: list[Any]
+import constants
+import json
 
 
 # In[ ]:
 
 
 #!/usr/bin/env python3
-
-import constants
 
 print("Reader process started. Waiting for data...")
 
@@ -34,6 +24,9 @@ with open(constants.PIPE_PATH, 'r') as pipe:
                 # Pipe was closed by writer
                 break
             print(f"Received: {data.strip()}")
+            json_string = data.strip()
+            data = json.loads(json_string)
+            metadata = constants.PGM(data['height'], data['width'], data["maxv"])
         except KeyboardInterrupt:
             break
         except Exception as e:

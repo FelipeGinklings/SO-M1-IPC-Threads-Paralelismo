@@ -7,6 +7,13 @@ class PGM:
     width: int
     maxv: int
 
+    def to_dict(self):
+        return {
+            "width": self.width,
+            "height": self.height,
+            "maxv": self.maxv,
+        }
+
     def __str__(self):
         return f"height: {self.height}, width: {self.width}, maxv: {self.maxv}"
 

@@ -17,11 +17,7 @@ import json
 if __name__ == '__main__':
     with Image.open("lena.pgm") as img:
         arr = np.array(img)
-        metadata = {
-            "width": img.width,
-            "height":img.height, 
-            "maximum_intensity_value": int(arr.max()),
-        }
+        metadata = constants.PGM(img.width, img.height, int(arr.max()))
         print(metadata)
 
 
@@ -40,7 +36,7 @@ if __name__ == '__main__':
 
     # Open the pipe for writing
     with open(constants.PIPE_PATH, 'w') as pipe:
-        message = json.dumps(metadata)
+        message = json.dumps(metadata.to_dict())
         pipe.write(message)
         pipe.flush()
 
