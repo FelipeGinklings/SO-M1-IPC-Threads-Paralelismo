@@ -4,7 +4,7 @@
 # In[ ]:
 
 
-import constants
+from constants import PIPE_PATH, PGM
 import json
 
 
@@ -13,25 +13,25 @@ import json
 
 #!/usr/bin/env python3
 
-print("Reader process started. Waiting for data...")
+if __name__ == '__main__':
+    print("Reader process started. Waiting for data...")
 
-# Open the pipe for reading (blocks until writer opens)
-with open(constants.PIPE_PATH, 'r') as pipe:
-    while True:
-        try:
-            data = pipe.readline()
-            if not data:
-                # Pipe was closed by writer
+    # Open the pipe for reading (blocks until writer opens)
+    with open(PIPE_PATH, 'rb') as pipe:
+        while True:
+            try:
+                metadata = pipe.readline()
+                if not metadata:
+                    # Pipe was closed by writer
+                    break
+                metadata_dict = json.loads(metadata.decode())
+                pixel_bytes = pipe.read(metadata_dict['width'] * metadata_dict['height'])
+                print(metadata_dict, len(pixel_bytes))
+            except KeyboardInterrupt:
                 break
-            print(f"Received: {data.strip()}")
-            json_string = data.strip()
-            data = json.loads(json_string)
-            metadata = constants.PGM(data['height'], data['width'], data["maxv"])
-        except KeyboardInterrupt:
-            break
-        except Exception as e:
-            print(f"Error: {e}")
-            break
+            except Exception as e:
+                print(f"Error: {e}")
+                break
 
-print("Reader process finished")
+    print("Reader process finished")
 

@@ -7,7 +7,7 @@
 from PIL import Image
 import numpy as np
 import os
-import constants
+from constants import PGM, PIPE_PATH
 import json
 
 
@@ -17,8 +17,8 @@ import json
 if __name__ == '__main__':
     with Image.open("lena.pgm") as img:
         arr = np.array(img)
-        metadata = constants.PGM(img.width, img.height, int(arr.max()))
-        print(metadata)
+        data = arr.tobytes()
+        metadata = PGM(img.height, img.width, int(arr.max()), data)
 
 
 # In[ ]:
@@ -28,16 +28,17 @@ if __name__ == '__main__':
 
 if __name__ == '__main__':
     # Create the named pipe if it doesn't exist
-    if not os.path.exists(constants.PIPE_PATH):
-        os.mkfifo(constants.PIPE_PATH)
-        print(f"Created named pipe at {constants.PIPE_PATH}")
+    if not os.path.exists(PIPE_PATH):
+        os.mkfifo(PIPE_PATH)
+        print(f"Created named pipe at {PIPE_PATH}")
 
     print("Writer process started. Opening pipe...")
 
     # Open the pipe for writing
-    with open(constants.PIPE_PATH, 'w') as pipe:
-        message = json.dumps(metadata.to_dict())
-        pipe.write(message)
+    with open(PIPE_PATH, 'wb') as pipe:
+        message = json.dumps(metadata.to_dict()).encode("utf-8")
+        pipe.write(message + b'\n')
+        pipe.write(metadata.data)
         pipe.flush()
 
     print("Writer process finished")

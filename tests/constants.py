@@ -6,6 +6,7 @@ class PGM:
     height: int
     width: int
     maxv: int
+    data: bytes
 
     def to_dict(self):
         return {
