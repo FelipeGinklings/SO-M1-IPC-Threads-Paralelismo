@@ -26,7 +26,7 @@ if __name__ == '__main__':
 
 #!/usr/bin/env python3
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # Create the named pipe if it doesn't exist
     if not os.path.exists(PIPE_PATH):
         os.mkfifo(PIPE_PATH)
@@ -35,9 +35,9 @@ if __name__ == '__main__':
     print("Writer process started. Opening pipe...")
 
     # Open the pipe for writing
-    with open(PIPE_PATH, 'wb') as pipe:
+    with open(PIPE_PATH, "wb") as pipe:
         message = json.dumps(metadata.to_dict()).encode("utf-8")
-        pipe.write(message + b'\n')
+        pipe.write(message + b"\n")
         pipe.write(metadata.data)
         pipe.flush()
 
