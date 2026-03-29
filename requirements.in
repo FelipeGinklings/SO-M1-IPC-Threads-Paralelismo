@@ -4,3 +4,4 @@ pillow
 numpy
 jupyter_client
 jupyter_core
+nbconvert

@@ -19,10 +19,11 @@ class ImageMetadata:
         return f"height: {self.height}, width: {self.width}, maxv: {self.maxv}"
 
 
-@dataclass(frozen=True)
+@dataclass
 class Header:
     mode: int
     slice_range: tuple[int, int]
+    colored: bool
 
     def to_dict(self):
         return {
