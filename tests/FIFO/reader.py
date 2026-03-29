@@ -4,7 +4,7 @@
 # In[ ]:
 
 
-from constants import PIPE_PATH, PGM
+from constants import PIPE_PATH, ImageMetadata
 import json
 
 
@@ -38,4 +38,3 @@ if __name__ == "__main__":
     print(metadata_dict, f", Bytes len: {len(pixel_bytes)}")
 
     print("Reader process finished")
-

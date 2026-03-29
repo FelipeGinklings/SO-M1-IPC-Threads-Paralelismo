@@ -7,18 +7,18 @@
 from PIL import Image
 import numpy as np
 import os
-from constants import PGM, PIPE_PATH
+from constants import ImageMetadata, PIPE_PATH
 import json
 
 
 # In[ ]:
 
 
-if __name__ == '__main__':
-    with Image.open("lena.pgm") as img:
+if __name__ == "__main__":
+    with ImageMetadata.open("lena.pgm") as img:
         arr = np.array(img)
         data = arr.tobytes()
-        metadata = PGM(img.height, img.width, int(arr.max()), data)
+        metadata = ImageMetadata(img.height, img.width, int(arr.max()), data)
 
 
 # In[ ]:
@@ -42,4 +42,3 @@ if __name__ == "__main__":
         pipe.flush()
 
     print("Writer process finished")
-
