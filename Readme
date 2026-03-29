@@ -1,0 +1,102 @@
+# Processamento de Imagens com Pipe + Threads
+
+Este projeto envia uma imagem do processo sender para o processo worker via FIFO (named pipe), e aplica um dos modos de processamento:
+
+- NEG: negativo da imagem
+- SLICE: threshold por faixa de intensidade
+
+## Requisitos
+
+- Python 3.11+ (recomendado)
+- Sistema Unix-like (macOS/Linux) para suporte a FIFO em `/tmp/my_pipe`
+
+## Instalação de dependências
+
+No diretório do projeto:
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install --upgrade pip
+pip install -r requirements.txt
+```
+
+Observação: se o comando `jupyter nbconvert` não estiver disponível, instale também:
+
+```bash
+pip install nbconvert
+```
+
+## Estrutura principal
+
+- `main_sender.ipynb`: seleciona imagem e envia dados para o pipe
+- `main_worker.ipynb`: recebe dados do pipe, processa e salva saída
+- `constants.py`: modelos e constantes compartilhadas
+- `Makefile`: converte notebooks para scripts Python
+- `scripts/`: scripts gerados via `make compile`
+
+## Como executar (modo notebook)
+
+1. Abra `main_worker.ipynb` e execute as células.
+2. Rode a célula final (`if __name__ == "__main__":`) para iniciar o worker.
+3. Em outra janela/kernel, abra `main_sender.ipynb` e execute as células.
+4. Rode a célula final para iniciar o sender.
+5. Escolha a imagem (`.pgm` ou `.ppm`) e informe o modo:
+   - `0` para NEG
+   - `1` para SLICE (depois informe `start` e `end`)
+
+Arquivo de saída esperado:
+
+- no worker notebook: `output/output.pgm` ou `output/output.ppm`
+
+## Como executar (modo script)
+
+Primeiro, gere os scripts a partir dos notebooks:
+
+```bash
+make compile
+```
+
+Isso gera:
+
+- `scripts/main_sender.py`
+- `scripts/main_worker.py`
+- `scripts/constants.py`
+
+Depois execute em dois terminais diferentes:
+
+Terminal 1 (worker):
+
+```bash
+cd scripts
+python main_worker.py
+```
+
+Terminal 2 (sender):
+
+```bash
+cd scripts
+python main_sender.py
+```
+
+Arquivo de saída esperado:
+
+- no modo script: `scripts/output/output.pgm` ou `scripts/output/output.ppm`
+
+## Resolução de problemas
+
+- Worker bloqueado em “Waiting for data...”:
+  - comportamento normal até o sender abrir o pipe e enviar dados.
+- Erro com pipe existente:
+  - remova manualmente e rode novamente:
+
+```bash
+rm -f /tmp/my_pipe
+```
+
+- `ModuleNotFoundError`:
+  - confirme que o ambiente virtual está ativo e dependências instaladas.
+
+## Testes e arquivos de apoio
+
+A pasta `tests/` contém imagens e notebooks auxiliares para experimentos com FIFO e threads.
