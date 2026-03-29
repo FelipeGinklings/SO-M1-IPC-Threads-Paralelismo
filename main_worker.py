@@ -29,8 +29,13 @@ def start_pipe_reader():
                     # Pipe was closed by writer
                     break
                 payload = json.loads(metadata.decode())
+                colored = payload['header']['colored']
+                if colored:
+                    color = 3
+                else:
+                    color = 1
                 data = pipe.read(
-                    payload["width"] * payload["height"]
+                    payload["width"] * payload["height"] * color
                 )
             except KeyboardInterrupt:
                 break
