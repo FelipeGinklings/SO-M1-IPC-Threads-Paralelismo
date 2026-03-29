@@ -20,5 +20,3 @@ class PGM:
 
 
 PIPE_PATH = "/tmp/my_pipe"
-IMAGE_NAME = "vazo.pgm"
-IMAGE_TYPE_RESULT = "P5"
