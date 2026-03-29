@@ -23,7 +23,7 @@ class ImageMetadata:
 class Header:
     mode: int
     slice_range: tuple[int, int]
-    colored: bool
+    colored: bool = False
 
     def to_dict(self):
         return {
