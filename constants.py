@@ -29,6 +29,7 @@ class Header:
         return {
             "mode": self.mode,
             "slice_range": self.slice_range,
+            "colored": self.colored,
         }
 
     def __str__(self):

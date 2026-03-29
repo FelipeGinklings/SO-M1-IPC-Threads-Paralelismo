@@ -76,7 +76,7 @@ def ask_metadata_and_start_pipe(metadata, header):
         os.mkfifo(PIPE_PATH)
         print(f"Created named pipe at {PIPE_PATH}")
 
-    print("Writer process started. Opening pipe...")
+    print("Sender process started. Opening pipe...")
 
     with open(PIPE_PATH, "wb") as pipe:
         payload = metadata.to_dict()
@@ -86,7 +86,7 @@ def ask_metadata_and_start_pipe(metadata, header):
         pipe.write(metadata.data)
         pipe.flush()
 
-    print("Writer process finished")
+    print("Sender process finished")
 
 
 # In[ ]:

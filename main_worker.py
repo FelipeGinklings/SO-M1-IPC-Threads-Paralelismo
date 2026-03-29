@@ -16,7 +16,7 @@ from concurrent.futures import ThreadPoolExecutor
 
 
 def start_pipe_reader():
-    print("Reader process started. Waiting for data...")
+    print("Worker process started. Waiting for data...")
 
     # Open the pipe for reading (blocks until writer opens)
     payload = {}
@@ -104,7 +104,7 @@ def calculate_image_threads(height, min_rows_per_thread=50, max_threads=16):
 # In[ ]:
 
 
-def get_image_slice_values(metadata, colored=False):
+def get_image_slice_values(metadata, colored):
     threads = calculate_image_threads(metadata.height)
 
     width, height = metadata.width, metadata.height
@@ -155,10 +155,10 @@ def process_image_with_worker(
     worker,
     metadata,
     output_path,
+    colored,
     worker_args=None,
-    colored=False,
 ):
-    image_values = get_image_slice_values(metadata, colored=colored)
+    image_values = get_image_slice_values(metadata, colored)
     image = image_values["image"]
     slices = image_values["slices"]
 
@@ -194,8 +194,8 @@ def main():
             threshold_with_slicing_worker,
             metadata,
             output_path="output.pgm",
-            worker_args=lambda metadata: [header.slice_range, metadata.maxv],
             colored=header.colored,
+            worker_args=lambda metadata: [header.slice_range, metadata.maxv],
         )
     elif header.mode == NEG_MODE:
         process_image_with_worker(
@@ -213,4 +213,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+    print("Worker process finished")
 
