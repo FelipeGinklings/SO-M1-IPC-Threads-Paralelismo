@@ -19,4 +19,21 @@ class ImageMetadata:
         return f"height: {self.height}, width: {self.width}, maxv: {self.maxv}"
 
 
+@dataclass(frozen=True)
+class Header:
+    mode: int
+    slice_range: tuple[int, int]
+
+    def to_dict(self):
+        return {
+            "mode": self.mode,
+            "slice_range": self.slice_range,
+        }
+
+    def __str__(self):
+        return f"mode: {self.mode}, slice_range: {self.slice_range}"
+
+
 PIPE_PATH = "/tmp/my_pipe"
+NEG_MODE = 0
+SLICE_MODE = 1
